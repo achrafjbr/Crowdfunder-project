@@ -19,12 +19,15 @@ const userSchema = mongoose.Schema({
       trim: true,
       required: true,
     },
+    balance:Number,
     role:{
         type:String,
         enum:['OWNER','ADMIN','INVESTOR'],
         default:'OWNER'
     }
 });
+
+
 
 const User = mongoose.model('User',userSchema);
 

@@ -1,7 +1,6 @@
-import { number, required } from "joi";
 import mongoose, { Mongoose } from "mongoose";
 
-const status = ['open, closed']
+const status = ['open', 'closed']
 const projectSchema = mongoose.Schema({
 
     title:{
@@ -21,7 +20,7 @@ const projectSchema = mongoose.Schema({
     status:{
         type: String,
         enum : status,
-        default: 'open',
+        default: status[0],
     },
     initialInvestement:{type:Number, required:true,trim:true,},
     maxInvestement:{type:Number, required:true,trim:true,},

@@ -1,14 +1,22 @@
+import Project from '../models/Project.js'
 
-const addProject=()=>{}
+
+const addProject= async(project)=> await Project.create(project);
+
+
+const deleteProject= async(id)=>await Project.findOneAndDelete({_id:id});
+
+const getProjects=async()=>await Project.find();
+
 const modifyProject=()=>{}
-const deleteProject=()=>{}
-const getProjects=()=>{}
 const getProjectInvestors=()=>{}
 
-export {
+ const projectDao ={
     addProject,
-    modifyProject,
+    modifyProject,                                                                                                                                                                                                                                             
     deleteProject,
-    getProjectInvestors,
     getProjects,
-}
+    getProjectInvestors,
+ }
+
+ export default projectDao;

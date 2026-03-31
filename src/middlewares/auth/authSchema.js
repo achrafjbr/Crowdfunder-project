@@ -1,21 +1,16 @@
 
 import Joi from "joi";
 
-
-
 const registerSchema = (request, response, next) =>{
-const {body:{name, email, password}} = request;
-console.log(name);
-    
+const {body:{name, email, password}} = request;    
 const {error} = Joi.object({
     name : Joi.string().required(),
     email : Joi.string().email().required(),
     password:Joi.string().required(),
 }).validate({name,email,password});
-   if(!error)
-        next();
-    return response.status(400).json({ error: error.details[0].message });
-
+   if(!error){next()}
+   else{return response.status(400).json({error: error.details[0].message});} 
+    
 }
 
 
@@ -26,9 +21,8 @@ const loginSchema=(request, response, next)=>{
     email : Joi.string().email().required(),
     password:Joi.string().required(),
 }).validate({email,password});
-if(!error)
-    next();
-    return response.status(400).json({ error: error.details[0].message });
+if(!error){next();}
+else{return response.status(400).json({ error: error.details[0].message });}
 }
 
 export {
