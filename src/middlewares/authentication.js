@@ -4,13 +4,10 @@ import {getHeaderToken} from '../utils/utilities.js'
 const isAuthenticated = (req, res, next) => {
   const token = getHeaderToken(req);
 
-  if (!token) {
-    return res.status(401).json({ message: "No token provided" });
-  }
-
+  if (!token) return res.status(401).json({ message: "No token provided" });
   try {
-    const decoded = verifyToken(token);
-    req.user = decoded;
+    const decodedToken = verifyToken(token);
+    req.user = decodedToken;
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid token" });
@@ -31,4 +28,4 @@ const authRoles = (...roles) => {
   };
 };
 
-module.exports = { isAuthenticated, authRoles };
+export  { isAuthenticated, authRoles };
