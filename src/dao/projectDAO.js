@@ -1,3 +1,4 @@
+import Investement from '../models/Investement.js';
 import Project from '../models/Project.js'
 
 
@@ -8,8 +9,10 @@ const deleteProject= async(id)=>await Project.findOneAndDelete({_id:id});
 
 const getProjects=async()=>await Project.find();
 
-const modifyProject=()=>{}
-const getProjectInvestors=()=>{}
+const modifyProject=(id,body)=>Project.findByIdAndUpdate(id,body,{new:true});
+
+// consulter la liste des investisseurs d’un projet avec (nom, montant investie, pourcentage du capital)
+const getProjectInvestors=(id)=>Investement.find({project:id}).populate('investor');
 
  const projectDao ={
     addProject,

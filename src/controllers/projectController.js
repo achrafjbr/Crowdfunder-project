@@ -15,8 +15,22 @@ const addProject= async(request, response)=>{
     });
     }
 }
+
+const getProjects=async(_, response)=>{
+   try {
+     const result = await projectService.getProjects();
+    return response.status(result.statusCode).json(result); 
+   } catch (error) {
+    response.status(500).json({ 
+            statusCode: 500,
+            message: error.message,
+    });
+   }
+}
+
+
 const deleteProject=async(request, response)=>{
-   const {id} = request.query;
+   const {id} = request.params;
   try {
     const result = await projectService.deleteProject(id);
     return response.status(result.statusCode).json(result); 
@@ -28,18 +42,36 @@ const deleteProject=async(request, response)=>{
   }
 
 }
+
+
 const modifyProject= async(request, response)=>{
-    const result = await projectService.modifyProject()
+    const {id} = request.params;
+    const body = request.body;
+    console.log(id);
+    console.log(body);
+    
+  try {
+    const result = await projectService.modifyProject(id,body)
+    return response.status(result.statusCode).json(result); 
+   } catch (error) {
+    response.status(500).json({ 
+            statusCode: 500,
+            message: error.message,
+    });
+   }
 }
 
-
-
-const getProjects=(request, response)=>{
-    projectService.getProjects();
-}
-
-const getProjectInvestors=(request, response)=>{
-    projectService.getProjectInvestors();
+const getProjectInvestors=async(request, response)=>{
+    const {id} = request.params; // [id] project id
+    try {
+        const result = await projectService.getProjectInvestors(id);
+        return response.status(result.statusCode).json(result); 
+    } catch (error) {
+         response.status(500).json({ 
+            statusCode: 500,
+            message: error.message,
+    });
+    }
 }
 
 

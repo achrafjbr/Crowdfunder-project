@@ -1,10 +1,12 @@
-const errorMessage = (statusCode, message) => {
+/*
+  const errorMessage = (statusCode, message) => {
   return {
     statusCode,
     message,
   };
 };
 
+*/
 class Message {
   constructor(statusCode, message) {
     this.statusCode = statusCode;
@@ -56,8 +58,19 @@ class DIMessage {
 
 }
 
+
+const errorMessage=(statusCode, message)=>{
+  return  new DIMessage().message(new ErrorMessage(statusCode,message))
+}
+
+const successMessage=(statusCode, data)=>{
+ return new DIMessage().message(new SuccessMessage(statusCode, 'Success',data))
+}
+
+
 export  {
   errorMessage,
+  successMessage,
   DIMessage,
   ErrorMessage,
   SuccessMessage,

@@ -14,6 +14,7 @@ const investementSchema = mongoose.Schema({
     },
 
     amount:Number,
+    
     date:{
         type:Date,
         default:Date.now,

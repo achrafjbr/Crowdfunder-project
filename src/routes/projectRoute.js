@@ -7,9 +7,9 @@ projetRouter.use(isAuthenticated);
 
 projetRouter.post('/', authRoles('OWNER'), addProject);
 projetRouter.get('/',authRoles('OWNER'), getProjects);
-projetRouter.get('/investors',authRoles('OWNER'),getProjectInvestors);
-projetRouter.delete('/',authRoles('OWNER'), deleteProject);
-projetRouter.put('/',authRoles('OWNER'),modifyProject);
+projetRouter.get('/investors/:id',authRoles('OWNER'),getProjectInvestors);
+projetRouter.delete('/:id',authRoles('OWNER'), deleteProject);
+projetRouter.put('/:id',authRoles('OWNER'),modifyProject);
 
 
 export default projetRouter;
