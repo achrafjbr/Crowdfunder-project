@@ -2,29 +2,25 @@ import investemendDao from "../dao/investementDAO.js";
 
 
 
-
-const invest = async(projectId, investorId, investementAmount) => {
+// Done
+const invest = async(projectId, investorId, investementAmount) =>
     await investemendDao.invest(projectId, investorId, investementAmount);
-}
 
+// Done
+const invesincrementInvestorBalance = async(userId,balance)=>
+    await investemendDao.incrementInvestorBalance(userId,balance);
 
-const invesincrementInvestorBalance = async()=>{
-     await investemendDao.incrementInvestorBalance();
-}
-const getOpenProject = async()=>{
-      await investemendDao.getOpenProject();
-}
-// project and who's invested in.
-const getProjectDetails = async()=>{
-    await investemendDao.getProjectDetails();
-}
-const getInvestementDetailsOfProject = async()=>{
-      await investemendDao.getInvestementDetailsOfProject();
-}
-//voir pour chaque projet : (le montant investi, le pourcentage détenu)
-const getInvestedAmountAndPercetage= async()=>{
-    await investemendDao.getInvestedAmountAndPercetage();
-}
+// Done
+const getOpenProject = async()=>await investemendDao.getOpenProject();
+
+// 
+const getProjectDetails = async(projectId)=>await investemendDao.getProjectDetails(projectId);
+
+const getInvestementDetailsOfProject = async(userId)=>await investemendDao.getInvestementDetailsOfProject(userId);
+
+const getInvestedAmountAndPercetage= async(projectId)=>
+    await investemendDao.getInvestedAmountAndPercetage(projectId);
+
 
 
 const investementService = {

@@ -64,7 +64,7 @@ const errorMessage=(statusCode, message)=>{
 }
 
 const successMessage=(statusCode, data)=>{
- return new DIMessage().message(new SuccessMessage(statusCode, 'Success',data))
+ return new DIMessage().message(new SuccessMessage(statusCode, 'Success', data))
 }
 
 

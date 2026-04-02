@@ -4,29 +4,42 @@ import User from "../models/User.js"
 import { errorMessage, successMessage } from "../utils/error.js";
 import projectDao from "./projectDAO.js";
 
-const getProjectById =async(projectId)=> await Project.findOne({_id:projectId})
-const closeProject=async(projectId)=>await Project
-.findOneAndUpdate(
+const getProjectById =async(projectId)=> await Project.findOne({_id:projectId});
+
+const closeProject=async(projectId)=>await Project.findOneAndUpdate(
     {_id:projectId},
     {status:'closed'},
     {new:true},
 );
+const openProject=async(projectId)=>await Project.findOneAndUpdate(
+    {_id:projectId},
+    {status:'open'},
+    {new:true},
+);
+const getProjectOwner = async(owner)=> await Project.findOne({owner:owner}).exec();
 
-const incrementInvestorBalance =(userId,balance)=>User.findOneAndUpdate(
+
+const incrementInvestorBalance =async(userId,balance)=>{
+    const result = await User.findOneAndUpdate(
         {_id:userId},
         {balance:balance},
         {new:true},
-    );
+    );    
+    if(!result)return errorMessage(404,'No investement found');
+        return successMessage(200, result);
+}
 
 const invest = async(projectId, investorId, investementAmount) => {
     const {title,capital,status,owner} = await getProjectById(projectId);
-
-    if(status == 'closed'){
-    return errorMessage(404,  
-        {title:title,
+    
+    const projectData = {
+        title:title,
         status:status,
         capital:capital,
-        owner:owner});
+        owner:owner,}
+
+    if(status == 'closed'){
+    return errorMessage(404,projectData);
     }
 
     const fiftyPercentProjectCapital = capital*50/100;
@@ -55,7 +68,7 @@ const invest = async(projectId, investorId, investementAmount) => {
         amount:investementAmount},);
 
     //Close project if the investement acheive the capital.
-        if(totalInvestementAmount+investementAmount == investemenetData.amount)
+        if(totalInvestementAmount+investemenetData.amount == capital )
             {
                const newProject = await closeProject(projectId);
                const newProjectData = {...newProject, status:status}
@@ -63,30 +76,57 @@ const invest = async(projectId, investorId, investementAmount) => {
             }
     
     // return the project
-    return successMessage(201,'success', 
-        {title:title,
-        status:status,
-        capital:capital,
-        owner:owner,});
-    
+    const projectOwner =  await getProjectOwner(owner);        
+    return successMessage(201, {...projectData, owner: projectOwner});
     
 }
 
-const getOpenProject = ()=>Project.find({status:'open'}).exec();
+const getOpenProject = async()=>{
+    const result = await Project.findOne({'status':'open'}).exec();
+   if(!result)return errorMessage(404,'No open project found');
+        return successMessage(200,result);
+}
 
-// project and who's invested in.
-const getProjectDetails = async(projectId)=>
-await Project
-  .find({ project: projectId })
-  .populate("owner");
+const getProjectDetails = async(projectId)=>{
+ //const project = await Project.findOne({_id:projectId}).populate('owner');
+    const investments = await Investement
+    .find({ project: projectId })
+    .populate("investor")
+    const result =  {
+    //...project,
+       investments
+    };
+    if(!result)return errorMessage(404,'No investement found');
+        return successMessage(200, result);
+}
 
-const getInvestementDetailsOfProject = async(projectId)=>{
-    await Investement
-  .find({ project: projectId })
-  .populate("investor");
+
+const getInvestementDetailsOfProject = async(userId)=>{
+  const result = await Investement
+  .find({ investor: userId })
+  .populate("project")
+  .lean();
+  if(!result)return errorMessage(404,'No investement found');
+        return successMessage(200, result);
 }
 //voir pour chaque projet : (le montant investi, le pourcentage détenu)
-const getInvestedAmountAndPercetage= ()=>{}
+const getInvestedAmountAndPercetage= async(projectId)=>{
+    const result = await Investement.find({project:projectId}).populate('investor');
+    let totalAmount = 0;
+    for (let index = 0; index < result.length; index++) {
+         totalAmount += result[index].amount;
+        }
+        console.log(projectId);
+        
+        if(!result)return errorMessage(404,'No investement found');
+        const {capital} = await getProjectById(projectId);
+        const percent = parseFloat((totalAmount/capital).toPrecision(2));
+        return successMessage(200, {
+            montantInvesti:totalAmount,
+            pourcentageDétenu: percent,
+        });
+
+}
 
 const investemendDao ={
     invest,
@@ -95,6 +135,7 @@ const investemendDao ={
     getProjectDetails,
     getInvestementDetailsOfProject,
     getInvestedAmountAndPercetage,
+    openProject,
 }
 
 export default investemendDao

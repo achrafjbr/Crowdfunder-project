@@ -3,10 +3,10 @@ import { registerSchema, loginSchema }   from "../utils/validation.js";
 
 const register = async (request, response) => {
     const {
-        body: { name, email, password },
+        body: { name, email, password, role },
     } = request;
     try {
-        const result = await registerService(name, email, password);
+        const result = await registerService(name, email, password, role);
         return response.status(result.statusCode).json(result);
     } catch (error) {
         return response.status(500).json({

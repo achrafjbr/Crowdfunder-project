@@ -6,6 +6,8 @@ import  PREFIX_ROUTE_PATH  from './src/utils/constants.js';
 import projetRouter from './src/routes/projectRoute.js';
 import investementRouter from './src/routes/investementRoute.js';
 import { authRoles } from './src/middlewares/authentication.js';
+import administratorRouter from './src/routes/administratorRouter.js';
+
 const app = express();
 dotenv.config();
 
@@ -18,7 +20,7 @@ app.use(`${PREFIX_ROUTE_PATH}/auth`, authenticationRouter),
 
 app.use(`${PREFIX_ROUTE_PATH}/project`,projetRouter),
 
-app.use(`${PREFIX_ROUTE_PATH}/investement`,investementRouter),
+app.use(`${PREFIX_ROUTE_PATH}/admin`,administratorRouter),
 
 
 

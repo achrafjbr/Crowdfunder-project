@@ -40,7 +40,7 @@ const login = async (email, password) => {
   }
 };
 
-const register = async (name, email, password) => {
+const register = async (name, email, password,role) => {
   const user = await findUserByemail(email);
   if (user) {
     return new DIMessage().message(
@@ -55,6 +55,7 @@ const register = async (name, email, password) => {
       name: name,
       email: email,
       password: hashedPassword,
+      role:role
     });
     // 3- return result.
     return new DIMessage().message(
