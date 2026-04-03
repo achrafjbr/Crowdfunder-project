@@ -34,6 +34,8 @@ const getInvestorsWallet =async(request,response)=>{
 
 const getOwnersWallet =async(request,response)=>{
         const ownerId = request.params.id;
+        console.log('ownerId',ownerId);
+        
         try {
           const result = await adminService.getOwnersWallet(ownerId);
             return response.status(result.statusCode).json(result);

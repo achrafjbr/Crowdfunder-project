@@ -44,15 +44,69 @@ const getInvestorsWallet =async(investorId)=>{
 }
 
 //consulter le portefeuille d’un porteur de projet (projets créés, montants levés)
-const getOwnersWallet =async(projectOwner)=>{
-   const projects = await Project.find({owner:projectOwner})
-    .populate('owner');
-    projects.map(async project=> {
-        const projectId = project.id;
-        const {amount} = await Investement.find({project:projectId}).populate('investor');
-        console.log(amount)
+const getOwnersWallet1 =async(projectOwner)=>{
+    
+
+   const projects = await Project.find({owner:projectOwner}).populate('owner');
+   const projectsData = projects.map(  project=>  ({id:project.id, title:project.title}));
+    if(projectsData.length<=0)return errorMessage(404, "No data found");
+
+    projectsData.map( async ({id,title}) =>  
+    {
+             await Investement.find({project:id}).populate('investor')
+            .then((investors)=>{
+                console.log('investors',investors);
+                
+                let amountCollected = 0;
+                for (let index = 0; index < investors.length; index++) {
+                    if(investors.length>0){
+                amountCollected += investors[index].amount;
+                projectAndAmountsCollected.push({project:title,amountCollected});
+                    }
+                
+
+            console.log("projectAndAmountsCollected",projectAndAmountsCollected)
+      
+           } 
+            });
+           
     });
+    
+    return successMessage(200,data);
 }
+
+
+const getOwnersWallet = async (projectOwner) => {
+  const projects = await Project.find({ owner: projectOwner }).lean();
+
+  if (projects.length === 0) {
+    return errorMessage(404, "No data found");
+  }
+
+  const result = await Promise.all(
+    projects.map(async (project) => {
+      const investments = await Investement
+        .find({ project: project._id })
+        .lean();
+
+        console.log('Investement',investments);
+        
+
+      const amountCollected = investments.reduce(
+        (sum, inv) => sum + inv.amount,
+        0
+      );
+
+      return {
+        projectId: project._id,
+        title: project.title,
+        amountCollected,
+      };
+    })
+  );
+
+  return successMessage(200, result);
+};
 
 const adminDao = {
     getAllInvestors,

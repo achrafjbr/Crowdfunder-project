@@ -10,8 +10,7 @@ const getAllIProjectOwners =async()=>await adminDao.getAllIProjectOwners();
 const getInvestorsWallet =async(investorId)=>
     await adminDao.getInvestorsWallet(investorId);
 
-const getOwnersWallet =async(ownerId)=>
-    await adminDao.getOwnersWallet(ownerId);
+const getOwnersWallet =async(ownerId)=>await adminDao.getOwnersWallet(ownerId);
 
 
 
