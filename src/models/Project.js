@@ -23,8 +23,8 @@ const projectSchema = mongoose.Schema({
         default: status[0],
     },
     initialInvestement:{type:Number, required:true,trim:true,},
-    maxInvestement:{type:Number, required:true,trim:true,},
-    percentageInvestement:{type:Number, required:true,trim:true,},
+    //maxInvestement:{type:Number, required:true,trim:true,},
+    //percentageInvestement:{type:Number, required:true,trim:true,},
     owner:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
