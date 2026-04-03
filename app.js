@@ -8,6 +8,8 @@ import investementRouter from './src/routes/investementRoute.js';
 import { authRoles } from './src/middlewares/authentication.js';
 import administratorRouter from './src/routes/administratorRouter.js';
 
+import swaggerSetup from './src/config/swagger.js'
+
 const app = express();
 dotenv.config();
 
@@ -23,8 +25,8 @@ app.use(`${PREFIX_ROUTE_PATH}/project`,projetRouter),
 app.use(`${PREFIX_ROUTE_PATH}/admin`,administratorRouter),
 
 
-
-
+// Swagger setup
+swaggerSetup(app)
 
 
 
